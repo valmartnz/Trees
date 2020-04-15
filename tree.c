@@ -149,24 +149,29 @@ void tree_test() {
 
 
 int main(int argc, const char* argv[]) {
-  tree_test();
+  //tree_test();
 
-  // int word, i = 0;
-  // FILE* fin;
-  tree* t = tree_create();
+  FILE* fin = fopen(argv[1], "r");
   char* word;
-  //const char* filename = argv[1];
-  //const char* words[MAXLEN];
+  char buf[MAXLEN];
+  tree* t = tree_create();
 
-  if(argc < 2) {
-    fprintf(stderr, "Usage: ./tree (filename)\n");
-    exit(1);
+  while(fgets(buf, sizeof(buf), fin)) {
+    word = strtok(buf, " ");
+    while(word != NULL) {
+      tree_add(t, word);
+      word = strtok(NULL, " ");
+    }
   }
-  const char* filename = argv[1];
-  while(strtok(word, filename)) {
-    tree_add(t, word);
-  }
+  fclose(fin);
+
   tree_print(t);
+  printf("is my tree empty? %s\n", yesorno(tree_empty(t)));
+  printf("size of tree: %zu\n\n", tree_size(t));
+
+  tree_clear(t);
+  printf("is my tree empty now? %s\n", yesorno(tree_empty(t)));
+  printf("size of tree: %zu\n\n", tree_size(t));
 
   return 0;
 }
